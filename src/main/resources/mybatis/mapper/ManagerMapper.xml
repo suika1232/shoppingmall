@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.springboot.ManagerDAO">
+	<select id="memberList" resultType="com.human.springboot.ManagerDTO">
+		select *
+		from test_member
+		order by member_seq
+	</select>
+	<select id="memberListPaging"
+			resultType="com.human.springboot.ManagerDTO"
+			parameterType="com.human.springboot.ManagerPagination">
+	<![CDATA[
+		select *
+		from
+			(
+			select rownum as row_num, sub.*
+			from 
+				(
+				select *
+				from test_member
+				order by member_seq
+				)sub
+			where rownum <= #{pageNo} * #{amount}
+			)
+		where row_num > (#{pageNo} - 1) * #{amount}
+	]]>
+	</select>
+	<select id="getMemberCount" resultType="int">
+		select count(*)
+		from test_member
+	</select>
+	<select id="prodList" resultType="com.human.springboot.ManagerDTO">
+		select a.prod_id, b.category_name, a.prod_code, a.prod_name, a.prod_price, a.prod_amount
+		from test_product a, test_category b
+		where a.prod_category_code = b.category_code
+		order by a.prod_id
+	</select>
+	<select id="prodListPaging" 
+			resultType="com.human.springboot.ManagerDTO"
+			parameterType="com.human.springboot.ManagerPagination">
+	<![CDATA[
+		select *
+		from
+			(
+			select rownum as row_num, sub.*
+			from
+				(
+				select a.prod_id, b.category_name, a.prod_code, a.prod_name, a.prod_price, a.prod_amount
+				from test_product a, test_category b
+				where a.prod_category_code = b.category_code
+				order by a.prod_id
+				)sub
+			where rownum <= #{pageNo} * #{amount}
+			)
+		where row_num > (#{pageNo} - 1) * #{amount}
+	]]>
+	</select>
+	<select id="getProdCount" resultType="int">
+		select count(*)
+		from test_product
+	</select>
+	<select id="prodCategoryList" resultType="com.human.springboot.ManagerDTO">
+		select *
+		from test_category
+		order by category_code
+	</select>
+	<insert id="prodInsert">
+		insert into test_product(prod_id, prod_code, prod_category_code, prod_name,
+								 prod_price, prod_image, prod_created, prod_desc,
+								 prod_amount, prod_amount_sold)
+		values(test_prod_seq.nextval, #{param1}, #{param2}, #{param3}, #{param4}, #{param5},
+			   to_char(sysdate,'yyyymmdd'), #{param6}, #{param7}, 0)
+	</insert>
+	<update id="prodUpdate">
+		update test_product
+		set prod_code = #{param2}, prod_category_code = #{param3}, prod_name = #{param4},
+			prod_price = #{param5}, prod_image = #{param6}, prod_desc = #{param7},  prod_amount = #{param8}
+		where prod_id = #{param1}
+	</update>
+	<delete id="prodDelete">
+		delete test_product
+		where prod_id = #{param1}
+	</delete>
+	<update id="prodImgUpdate">
+		update test_product
+		set prod_image = #{param2}
+		where prod_id = #{param1}
+	</update>
+	<select id="prodInfo" resultType="com.human.springboot.ManagerDTO">
+		select *
+		from test_product
+		where prod_id = #{param1}
+	</select>
+	<select id="getProdAmount" resultType="com.human.springboot.ManagerDTO">
+		select prod_id, prod_name, prod_amount
+		from test_product
+		where prod_id = #{param1}
+	</select>
+	<update id="updateProdAmount">
+		update test_product
+		set	prod_amount = #{param2} + (select prod_amount from test_product where prod_id = #{param1})
+		where prod_id = #{param1}
+	</update>
+	<update id="emptyProdAmount">
+		update test_product
+		set prod_amount = 0
+		where prod_id = #{param1}
+	</update>
+	<select id="orderList" resultType="com.human.springboot.ManagerDTO">
+		select *
+		from test_order
+		order by order_seq desc
+	</select>
+	<select id="orderListPaging" 
+			resultType="com.human.springboot.ManagerDTO" 
+			parameterType="com.human.springboot.ManagerPagination">
+	<![CDATA[
+		select *
+		from
+			(
+			select rownum as row_num, order_seq, order_date, order_status, prod_id
+			from 
+				(
+				select *
+				from test_order
+				order by order_seq desc
+				)
+			where rownum <= #{pageNo} * #{amount}
+			)
+		where row_num > (#{pageNo} - 1) * #{amount}
+	]]>
+	</select>
+	<select id="getOrderCount" resultType="int">
+		select count(*)
+		from test_order
+	</select>
+	<update id="orderStatusUpdate">
+		update test_order
+		set order_status = 'y'
+		where order_seq = #{param1}
+	</update>
+	<select id="orderProdQty" resultType="com.human.springboot.ManagerDTO">
+		select prod_id, order_qty
+		from test_order
+		where order_seq = #{param1}
+	</select>
+	<delete id="orderCancel">
+		delete test_order
+		where order_seq = #{param1}
+	</delete>
+	<update id="refillProdQty">
+		update test_product
+		set prod_amount = (prod_amount + #{param2})
+		where prod_id = #{param1}
+	</update>
+	<select id="csList" resultType="com.human.springboot.ManagerDTO">
+		select a.post_seq, b.category_name, c.member_id, a.post_created, a.post_title, a.post_answer 
+		from test_post a, test_category b, test_member c
+		where a.prod_category_code = b.category_code and a.member_seq = c.member_seq and a.post_category='문의'
+		order by a.post_seq desc
+	</select>
+	<select id="csListPaging" 
+			resultType="com.human.springboot.ManagerDTO"
+			parameterType="com.human.springboot.ManagerPagination">
+	<![CDATA[
+		select *
+		from
+			(
+			select rownum as row_num, sub.*
+			from
+				(
+				select a.post_seq, b.category_name, c.member_id, a.post_created, a.post_title, a.post_answer 
+				from test_post a, test_category b, test_member c
+				where a.prod_category_code = b.category_code 
+					  and a.member_seq = c.member_seq 
+					  and a.post_category = '문의'
+				order by a.post_seq desc
+				)sub
+			where rownum <= #{pageNo} * #{amount}
+			)
+		where row_num > (#{pageNo} - 1) * #{amount}
+	]]>
+	</select>
+	<select id="getCsCount" resultType="int">
+		select count(*)
+		from test_post
+		where post_category = '문의'
+	</select>
+	<select id="csPost" resultType="com.human.springboot.ManagerDTO">
+		select b.category_name, a.post_title, a.post_content
+		from test_post a, test_category b
+		where a.prod_category_code = b.category_code and a.post_seq = #{param1}
+	</select>
+	<update id="csCommentUpdate">
+		update test_post
+		set post_comment = #{param2}, post_answer = '답변완료' 
+		where post_seq = #{param1}
+	</update>
+</mapper>

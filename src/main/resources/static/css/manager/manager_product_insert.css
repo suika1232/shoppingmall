@@ -1,0 +1,25 @@
+button {
+	-webkit-appearance: none; -moz-appearance: none; appearance: none;
+	font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+	border: 1px solid #232929; background-color: #232929; color: white; border-radius: 5px; height: 25px;
+}
+button:hover{background-color: black; color: white; border: 1px solid black;}
+button:active{border: 1px solid #232929; background-color: #232929; color: white;} 
+#fileBorder{border: 1px solid lightgray; height: 35px; width: 190px; line-height: 35px; 
+			padding-left: 2px; border-radius: 5px; display: inline-block;}
+#prodInsertDiv input{font-size: 14px;}
+#prodInsertDiv input:not([type=file]){height: 30px; width: 605px; border-radius: 5px; border: 1px solid lightgray;}
+#prodInsertDiv input[type=file]{width: 180px;}
+#btnProdInsert, #btnProdInsertCancel{width: 80px;}
+#prodCategory{height: 25px; width: 140px; font-size: 16px;}
+#select{width: 200px;}
+#menuTitle{width: 600px; font-weight: 700; font-size: 21px; margin-bottom: 5px;}
+#prodInsertDiv{
+	display: flex; flex-direction: column; font-family: 'Noto Sans KR', sans-serif;
+}
+label{
+	display: inline-block; margin-bottom: 8px; margin-top: 15px; 
+	font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+}
+#btnProdInsert, #btnProdInsertCancel{font-family: 'Noto Sans KR', sans-serif; font-weight: 500}
+#prodImgFile{font-family: 'Noto Sans KR', sans-serif;}

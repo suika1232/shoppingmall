@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	
+<mapper namespace="com.human.springboot.jh_DAO">
+	<!--로그인 -->
+	<select id="idChek" resultType="int" >
+		select count(*) from test_member where member_id=#{param1} 
+	</select>
+	<select id="login" resultType="int" >
+		select count(*) from test_member where member_id=#{param1} and member_pw=#{param2}
+	</select>	
+	
+	<!--회원가입 -->
+	<insert id="member_insert">
+		insert into test_member(member_seq,member_id,member_pw,member_name,member_mobile,member_email,member_address,member_class,member_created) 
+		values(TEST_MEMBER_SEQ.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},to_char(sysdate,'yyyymmdd'))
+	</insert>
+	
+	<!--정보수정 -->
+	<select id="getUserInfo" resultType="com.human.springboot.JA_memberDTO">
+		select * from test_member where member_id=#{param1} and member_pw=#{param2}
+	</select>
+	<update id="update_member">
+		update test_member set member_pw=#{param2},member_name=#{param3},member_mobile=#{param4},
+						  member_email=#{param5},member_address=#{param6} 
+						  where member_id=#{param1}
+	</update>
+	<select id="select_memberInfo" resultType="com.human.springboot.jh_memberDTO">
+		select member_id,member_pw,member_name,member_mobile,member_email,member_address
+	    from test_member
+	    where member_id=#{member_id}
+	</select>
+	
+	<!--상품리스트 -->
+	<select id="getProducts" resultType="com.human.springboot.jh_productDTO">
+		select * from test_product
+	</select>
+	
+	<select id="getKitchenProducts" resultType="com.human.springboot.jh_productDTO">
+		select * from test_product where prod_category_code=1
+	</select>
+	
+	<select id="getSeasonProducts" resultType="com.human.springboot.jh_productDTO">
+		select * from test_product where prod_category_code=2
+	</select>
+	
+	<select id="getHomeProducts" resultType="com.human.springboot.jh_productDTO">
+		select * from test_product where prod_category_code=3
+	</select>
+	<select id="getProduct" resultType="com.human.springboot.jh_productDTO">
+		select * from test_product where prod_id=#{param1}
+	</select>
+	<select id="getNewProducts" resultType="com.human.springboot.jh_productDTO">
+		<![CDATA[
+		select * from test_product 
+		where (to_date(to_char(sysdate,'YYYYMMDD')) - to_date(prod_created)) <=30
+		order by prod_created desc
+		]]>
+		<!-- 
+		select * from test_product
+		order by prod_created desc  이렇게하면 그냥 그냥 전상품중에서 가장나중에나온순
+		 -->
+	</select>
+	
+	<select id="getBestProducts" resultType="com.human.springboot.jh_productDTO">
+		select * from test_product
+		where prod_created!=to_char(sysdate,'YYYYMMDD') 
+		and prod_amount_sold/(to_date(to_char(sysdate,'YYYYMMDD'))-to_date(prod_created)) > 2
+		order by 
+		prod_amount_sold/(to_date(to_char(sysdate,'YYYYMMDD'))-to_date(prod_created))
+		desc 
+		
+		<!-- 
+		 위에처럼하면 하루에 하나 이상 팔린애들만, 판매율 높은 순서대로,
+		 아래처럼하면 판매율 높은 순서대로 전상품
+		 
+		select * from test_product
+		where prod_created!=to_char(sysdate,'YYYYMMDD')
+		order by 
+		prod_amount_sold/(to_date(to_char(sysdate,'YYYYMMDD'))-to_date(prod_created))
+		desc;
+				
+		
+		 -->	
+	</select>
+	<!--상품정보 페이지 -->
+	<select id="getReviews" resultType="com.human.springboot.jh_reviewDTO">
+		select m.member_id mid, r.review_rate, r.review_content
+		from test_review r, test_member m
+		where r.member_seq = m.member_seq and r.prod_id=#{param1}
+	</select>
+	<select id="getMember" resultType="com.human.springboot.jh_memberDTO">
+		select * from test_member where member_id=#{param1}
+	</select>
+	<select id="getMember2" resultType="com.human.springboot.jh_memberDTO">
+		select * from test_member where member_seq=#{param1}
+	</select>
+	<!--상품주문 -->
+	<insert id="addOrder">
+		insert into test_order values(test_order_seq.nextval, #{param1}, #{param2}, #{param3}, #{param4},
+		#{param5}, to_char(sysdate,'YYYYMMDD'), 'n', #{param6}, to_char(sysdate,'YYYYMMDD'), #{param7},
+		#{param8}, #{param9},''
+		)
+	</insert>
+	<!--주문목록 -->
+ 	<select id="select_orderList" resultType="com.human.springboot.jh_slectorderDTO">
+ 	<![CDATA[
+ 		select * from  
+		(
+        select rownum as row_num,sub.*
+         from 
+         (
+         select o.order_seq,p.prod_image,p.prod_name,o.order_created,o.order_status,o.order_payment 
+         from test_order o ,test_member t, test_product p 
+         where o.prod_id=p.prod_id and t.member_seq=o.member_seq 
+        and t.member_id=#{param1} order by o.order_created  desc
+         )sub 
+         where rownum <= #{param2} * #{param3}
+ 		) 
+ 		where row_num> (#{param2}-1) * #{param3} 
+ 	]]> 
+ 	</select> 
+	<select id="getOrderTotal" resultType="int"><!-- 유저의 주문목록 총 개수?갯수? -->
+		select count(*)
+		from test_order a, test_member b, test_product c
+		where a.prod_id = c.prod_id and a.member_seq = b.member_seq and b.member_id=#{param1}
+	</select>
+	<!--리뷰목록 -->
+	<select id = "select_reviewInfo" resultType="com.human.springboot.jh_selectreviewDTO"><!--작성가능한 리뷰정보 불러오기 -->
+		<![CDATA[
+			select * from 
+			(
+    			select rownum as row_num,sub.*
+   				from    
+    			(
+        		  select max(o.order_seq)oid ,rp.member_seq mseq, rp.prod_id pid, rp.prod_name pname, rp.prod_image pimg, max(o.order_date) lastorder, min(o.order_date) firstorder
+ 					from 
+					    (   select rp.member_seq, rp.prod_id, p.prod_name, p.prod_image
+					        from 
+					        (select prod_id, member_seq
+					        from test_order  where member_seq=#{param1} and prod_id not in(select prod_id from test_review where member_seq=#{param1}) and order_status='y'
+					        group by prod_id, member_seq order by prod_id) rp,
+					        test_product p
+					        where rp.prod_id = p.prod_id    ) rp,
+					    test_order o
+					where rp.member_seq = o.member_seq and rp.prod_id = o.prod_id 
+					group by  rp.member_seq, rp.prod_id, rp.prod_name, rp.prod_image
+    			)sub
+    			where rownum <= #{param2} * #{param3}
+			)
+			where row_num > (#{param2}-1) * #{param3} 
+		]]> 
+	</select>
+	<!--총 게시물 -->
+	<select id="getReviewTotal" resultType="int">
+		select count(*)
+		from(
+    		select prod_id, member_seq
+    	from test_order  where member_seq=#{param1} and prod_id not in(select prod_id from test_review where member_seq=100)
+    	group by prod_id, member_seq order by prod_id
+    
+		) a
+	</select>
+	<select id="getReviewRate" resultType="com.human.springboot.jh_reviewDTO">
+		select avg(review_rate) review_rate from test_review where prod_id=#{param1}
+	</select>
+	<select id="select_reviewInfos" resultType="com.human.springboot.jh_selectreviewsDTO"><!-- 작성한 리뷰정보 불러오기-->
+		<![CDATA[
+			select *from (
+    			select rownum as row_num,sub.*
+    			from
+    		(
+        			select r.review_seq,r.order_id, p.prod_name, p.prod_image, r.review_rate, r.review_content
+					from test_review r , test_product p , test_order o,test_member t
+					where r.prod_id=p.prod_id and r.order_id=o.order_seq and r.member_seq=t.member_seq and o.order_review='y' and t.member_id=#{param1} order by r.review_seq
+   			 )sub
+    			where rownum <= #{param2} * #{param3}
+			)
+			where row_num > (#{param2}-1) * #{param3}
+		]]>
+	</select>
+	<select id="getDoneTotal" resultType="int">
+		select count(*) 
+		from test_review a, test_product b , test_order c, test_member t
+			where a.prod_id = b.prod_id and  a.order_id= c.order_seq and a.member_seq = t.member_seq 
+    			and c.order_review='y'
+            			and t.member_id=#{param1}
+	</select>
+	<insert id="insert_review">	<!-- 리뷰 작성-->
+		insert into test_review values
+		(test_review_seq.nextval,#{param1},#{param2},
+		#{param3},#{param4},#{param5})
+	</insert>
+	<update id="update_status">	<!-- 리뷰 여부 업데이트-->
+		update test_order
+		set order_review='y'
+		where member_seq=#{param1} and prod_id=#{param2}
+	</update>
+	<update id="update_review">	<!-- 리뷰 내용 수정-->
+		update test_review set review_rate=#{param1},review_content=#{param2} where review_seq=#{param3}
+	</update>
+	<update id="update_refresh_review"><!-- 리뷰 내용 삭제시 다시 작성가능한 리뷰로 출력-->
+		update test_order set order_review='n' where order_seq=#{param1}	
+	</update>
+	<delete id="delete_review"><!-- 리뷰 내용 삭제-->
+		delete from test_review where review_seq=#{param1}
+	</delete>
+	<!-- 주문내역-->
+	<select id="findOrder" resultType="com.human.springboot.jh_orderDTO">	<!-- 주문내역 확인하고 정보가져오기-->
+		select * from test_order where member_seq=#{param1} and prod_id=#{param2} order by order_seq desc
+	</select>
+	<insert id="addReview">	<!-- 상품정보창 리뷰 추가-->
+		insert into test_review values(test_review_seq.nextval,
+		 #{param1},#{param2},#{param3},#{param4},#{param5}) 
+	</insert>
+	<!-- 장바구니-->
+	<insert id="addCart"><!--장바구니 추가-->
+		insert into test_cart values(test_cart_seq.nextval, #{param1}, #{param2}, #{param3}, #{param4} )
+	</insert>
+	<select id="select_cart" resultType="com.human.springboot.jh_selectcartDTO"><!-- 장바구니 목록 불러오기-->
+		<![CDATA[	
+			select *from 
+			(
+    			select rownum as row_num,sub.*
+    			from
+     			(       select prod_image,cart_price,cart_qty,cart_seq
+                		from  test_product p,test_cart c, test_member t
+                		where c.prod_id=p.prod_id and c.member_seq=t.member_seq and t.member_id=#{param1} order by cart_seq desc
+      			)sub
+      			where rownum <= #{param2} * #{param3}
+			)where row_num > (#{param2}-1) * #{param3}
+		]]>
+	</select>
+	<select id="selectCart" resultType="int">
+			select count(*)
+			from test_cart a, test_product b,test_member c
+			where a.prod_id=b.prod_id and a.member_seq=c.member_seq and c.member_id=#{param1} 
+	</select>
+	<select id="getCart" resultType="com.human.springboot.jh_cartDTO"><!-- 체크된 장바구니 주문하기-->
+		select c.cart_seq, c.prod_id pid, p.prod_name, p.prod_image, c.cart_qty, c.cart_price
+		from test_cart c, test_product p
+		where c.cart_seq=#{param1} and c.prod_id = p.prod_id
+	</select>
+	<delete id="delete_cart"><!-- 체크된 장바구니 삭제하기-->
+		delete from test_cart where cart_seq=#{param1}
+	</delete>
+</mapper>

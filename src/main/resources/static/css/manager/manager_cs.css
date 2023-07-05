@@ -1,0 +1,42 @@
+body{font-family: 'Noto Sans KR', sans-serif;}
+button {
+	-webkit-appearance: none; -moz-appearance: none; appearance: none;
+	font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+	border: 1px solid #232929; background-color: #232929; color: white; border-radius: 5px; height: 25px;
+}
+button:hover{background-color: black; color: white; border: 1px solid black;}
+button:active{border: 1px solid #232929; background-color: #232929; color: white;}
+#tblCs{
+	border-collapse: collapse; 
+	width: 700px;
+	table-layout: fixed;
+}
+#tblCs td{
+	height: 30px; 
+	overflow:hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+}
+#tblCs tr:first-child td{border-bottom: 1px solid black; font-weight: 700;}
+#tblCs tr:first-child td:nth-child(n+4):nth-child(-n+5){text-align: center;}
+#tblCs tr td:last-child{text-align: center;}
+#tblCs tr:nth-child(n+2):not(tr:last-child) td{border-bottom: 1px dotted gray;}
+#tblCs tr:last-child td{border-bottom: 1px solid black;}
+#tblCs td:nth-child(3){width: 125px;}
+#tblCs td:nth-child(5){width: 180px;}
+#tblCs tr:nth-child(n+2) td:nth-child(5){padding-left: 8px;}
+#tblCs tr:nth-child(n+2) td:nth-child(5):hover{cursor: pointer; color:blue;}
+.ui-dialog-titlebar{display: none;}
+#csModal{display: none;}
+#tblCsComment td:first-child{font-weight: 700;}
+#tblCsComment td:nth-child(1){width: 120px;}
+#tblCsComment tr{height: 45px;}
+#csComment{width: 318px; height: 100px; resize: none;}
+#btnModalSubmit{position: absolute; left: 225px;}
+#btnModalClose{position: absolute; left: 280px;}
+#menuTitle{width: 700px; font-weight: 700; font-size: 21px; margin-bottom: 5px;}
+#pageBox{width: 700px;text-align: center; font-weight: 400; color: gray;}
+.pageDiv{display: inline-block; width: 20px;}
+.pageDiv:hover{cursor: pointer;}
+.bold{font-weight: 700; color: black;}
+#displayPageCount{width: 50px; height: 25px;}

@@ -1,0 +1,135 @@
+.section{
+	 margin-bottom: 15px;
+   	 margin-top:23px;
+     padding-bottom:15%;
+	
+	 display:flex;	
+	 justify-content: center;
+	 align-items: center;
+     height:700px;
+	 max-height: 500px;
+ 	 overflow: hidden;
+}
+img{
+	width:400px;
+}
+.img{
+	 max-height: initial;
+  	 margin-top:15%;
+  	 
+}
+.info{
+	position: absolute;
+	top: 1000px;
+	left: 690px;
+	font-size:25px;
+	font-weight:bold;
+}
+.info2{
+	position: absolute;
+	top: 1000px;
+	left: 850px;
+	font-size:25px;
+	font-weight:bold;
+}
+.info3{
+	position: absolute;
+	top: 1000px;
+	left: 1080px;
+	font-size:25px;
+	font-weight:bold;
+}
+.icon{
+	position: absolute;
+	width:100%;
+	height:150px;
+	background-color:white;
+}
+.coco1{
+	color: black;
+	width:30px;
+	height:30px;
+	background-color:white;
+	background-image: url('/img/coco.png'); /* 버튼 배경 이미지 설정 */
+	background-size: cover; /* 배경 이미지 크기 조절 */
+ 	background-position: center; /* 배경 이미지 위치 조절 */
+  	background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+  	position: absolute;
+  	text-decoration: none; /* 텍스트 장식 제거 */
+	
+ 	display: inline-block;
+	top: 1030px;
+	left: 700px;
+	margin: 0 0.3rem;
+	padding: 10px 20px;
+	animation:fadeIn;
+	animation-duration: 1s;
+	font-weight:bold;
+	color:red;
+  	
+}
+.coco2{
+	color: black;
+	display:none;
+	border: none; /* 버튼 테두리 제거 */
+	width:30px;
+	height:30px;
+	background-image: url('/img/coco.png'); /* 버튼 배경 이미지 설정 */
+	background-size: cover; /* 배경 이미지 크기 조절 */
+ 	background-position: center; /* 배경 이미지 위치 조절 */
+  	background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+  	padding: 10px 20px; /* 버튼 패딩 설정 (상하 10px, 좌우 20px) */
+  	text-decoration: none; /* 텍스트 장식 제거 */
+	position: absolute;
+	top: 940px;
+	left: 850px;
+	background-color:white;
+ 	display: inline-block;
+	
+	
+	margin: 0 0.8rem;
+	animation:fadeIn;
+	animation-duration: 1s;
+  
+}
+.coco3{
+	color: black;
+	display:none;
+	border: none; /* 버튼 테두리 제거 */
+	width:30px;
+	height:30px;
+	background-image: url('/img/coco.png'); /* 버튼 배경 이미지 설정 */
+	background-size: cover; /* 배경 이미지 크기 조절 */
+ 	background-position: center; /* 배경 이미지 위치 조절 */
+  	background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+  	padding: 10px 20px; /* 버튼 패딩 설정 (상하 10px, 좌우 20px) */
+  	text-decoration: none; /* 텍스트 장식 제거 */
+	position: absolute;
+	background-color:white;
+ 	display: inline-block;
+	top: 1030px;
+	left: 1100px;
+	margin: 0 1.rem;
+	animation:fadeIn;
+	animation-duration: 1s;
+  	
+}
+#click{
+	width:50px;
+	height:50px;
+	position:absolute;
+	background-image: url('/img/click.png');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	top:695px;
+	right:800px;
+}
+#clickMe{
+	position:absolute;
+	top:695px;
+	right:850px;
+	font-size:25px;
+	font-weight:bold;
+}
+.hidden{display: none;}

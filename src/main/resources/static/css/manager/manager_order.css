@@ -1,0 +1,24 @@
+button {
+	-webkit-appearance: none; -moz-appearance: none; appearance: none;
+	font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+	border: 1px solid #232929; background-color: #232929; color: white; border-radius: 5px; height: 25px;
+}
+button:hover{background-color: black; color: white; border: 1px solid black;}
+button:active{border: 1px solid #232929; background-color: #232929; color: white;}
+#tblOrderList{border-collapse: collapse; width: 700px; font-family: 'Noto Sans KR', sans-serif;}
+#tblOrderList td:first-child{text-align: center;}
+#tblOrderList td:nth-child(n+5){text-align: center;}
+#tblOrderList tr:first-child td{border-bottom: 1px solid black; font-weight: bold;}
+#tblOrderList td{height: 30px;}
+#tblOrderList tr:nth-child(n+2):not(tr:last-child) td{border-bottom: 1px dotted gray;}
+#tblOrderList tr:last-child td{border-bottom: 1px solid black;}
+#tblOrderList input[type=checkbox], #tblOrderList button{margin: 0;}
+#menuTitle{
+	width: 600px; font-weight: 700; font-size: 21px; margin-bottom: 5px;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+#displayPageCount{width: 50px; height: 25px;}
+#pageBox{width: 700px;text-align: center; font-family: 'Noto Sans KR', sans-serif; font-weight: 400; color: gray;}
+.pageDiv{display: inline-block; width: 20px;}
+.pageDiv:hover{cursor: pointer;}
+.bold{font-weight: 700; color: black;}

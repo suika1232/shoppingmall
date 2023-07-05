@@ -1,0 +1,31 @@
+body{font-family: 'Noto Sans KR', sans-serif;}
+button {
+	-webkit-appearance: none; -moz-appearance: none; appearance: none;
+	font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+	border: 1px solid #232929; background-color: #232929; color: white; border-radius: 5px; height: 25px;
+}
+button:hover{background-color: black; color: white; border: 1px solid black;}
+button:active{border: 1px solid #232929; background-color: #232929; color: white;}
+#tblProdList {border-collapse: collapse; width: 700px;}
+#tblProdList td{height: 30px;}
+#tblProdList tr:first-child td{border-bottom: 1px solid black; font-weight: bold;}
+#tblProdList tr:nth-child(n+2):not(tr:last-child) td{border-bottom: 1px dotted gray;}
+#tblProdList tr:last-child td{border-bottom: 1px solid black;}
+#tblProdList tr:nth-child(n+2) td:last-child:hover{cursor: pointer;}
+#tblProdList td:nth-child(4){width: 130px;}
+#tblProdList td:nth-child(5){width: 180px; padding-left: 8px;}
+#menuTitle{width: 700px; font-weight: 700; font-size: 21px; margin-bottom: 5px;}
+#pageBox{width: 700px;text-align: center; font-weight: 400; color: gray;}
+.pageDiv{display: inline-block; width: 20px;}
+.pageDiv:hover{cursor: pointer;}
+.bold{font-weight: 700; color: black;}
+.ui-dialog-titlebar{display: none;}
+#prodAmountModal{display: none; font-family: 'Noto Sans KR', sans-serif;}
+#prodAmountModal button{font-family: 'Noto Sans KR', sans-serif; font-weight: 400; height: 28px;}
+#tblProdAmount{border-collapse: collapse; width:200px; text-align: left;}
+#tblProdAmount td:first-child{font-weight: 500; width: 70px;}
+#labelAmount{font-weight: 500;}
+#btnAddProdAmount{position: relative; left: 20px; margin-top: 5px;}
+#btnCloseModal{position: relative; left: 20px; margin-top: 5px;}
+#displayPageCount{width: 50px; height: 25px;}
+button {font-family: 'Noto Sans KR', sans-serif; font-weight: 400}

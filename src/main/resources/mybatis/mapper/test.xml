@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mtbatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.human.springboot.IDAO">
+	<select id="member_select" resultType="com.human.springboot.JA_memberDTO" >
+		select * from test_member
+	</select>	
+	<insert id="member_insert">
+		insert into test_member(member_seq,member_id,member_pw,member_name,member_mobile,member_email,member_address,member_class,member_created) 
+		values(TEST_MEMBER_SEQ.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},to_char(sysdate,'yyyymmdd'))
+	</insert>	
+	<select id="idChek" resultType="int" >
+		select count(*) from test_member where member_id=#{param1} 
+	</select>	
+	<select id="login" resultType="int" >
+		select count(*) from test_member where member_id=#{param1} and member_pw=#{param2}
+	</select>	
+	<select id="getUserInfo" resultType="com.human.springboot.JA_memberDTO">
+		select * from test_member where member_id=#{param1} and member_pw=#{param2}
+	</select>
+	<select id="idFind" resultType="String" >
+		select member_id from test_member where member_name=#{param1} and member_mobile=#{param2} and member_email=#{param3}  
+	</select>	
+
+
+	
+	<select id="notice_view" resultType="com.human.springboot.JA_memberDTO" >
+		select a.post_seq, a.post_title, a.post_content, a.post_created, a.post_answer, b.member_id, c.category_name
+		from test_post a, test_member b, test_category c
+		where a.member_seq = b.member_seq
+		and a.prod_category_code = c.category_code
+		and a.post_category in ('공지')
+		order by post_seq desc
+	</select>
+	<select id="paging"
+		resultType="com.human.springboot.JA_memberDTO"> 
+	<![CDATA[
+		select * 
+		from
+			(
+  			select rownum as row_num, sub.*
+  			from
+  				(
+   				select a.post_seq, a.post_title, a.post_content, a.post_created, a.post_answer, b.member_id, c.category_name
+    			from test_post a, test_member b, test_category c
+    			where a.member_seq = b.member_seq
+   				and a.prod_category_code = c.category_code
+    			and a.post_category not in ('공지')
+    			order by a.post_seq desc
+  				) sub
+ 			 where
+ 			  rownum <= #{pageNo} * #{amount}
+			)
+		where row_num > (#{pageNo}-1) * #{amount}
+ 	]]>
+	</select>
+	
+	<select id="searchPaging"
+		resultType="com.human.springboot.JA_memberDTO"> 
+	<![CDATA[
+		select * 
+		from
+			(
+  			select rownum as row_num, sub.*
+  			from
+  				(
+					select a.post_seq, a.post_title, a.post_content, a.post_created, a.post_answer, b.member_id, c.category_name
+					from test_post a, test_member b, test_category c
+					where a.member_seq = b.member_seq
+					and a.prod_category_code = c.category_code
+					and ${param3} like '%'||#{param4}||'%'
+					and a.post_category not in ('공지')
+					order by a.post_seq desc
+  				) sub
+ 			 where
+ 			  rownum <= #{pageNo} * #{amount}
+			)
+		where row_num > (#{pageNo}-1) * #{amount}
+ 	]]>
+	</select>
+
+	<select id="getTotalCount" resultType="int">
+        select count (*) from test_post where post_category not in ('공지')
+    </select>   
+    <select id="getTotalCount_search" resultType="int">
+       select count(a.post_seq)
+    			from test_post a, test_member b, test_category c
+    			where a.member_seq = b.member_seq     			
+   				and a.prod_category_code = c.category_code
+   				and ${param1} like '%'||#{param2}||'%'
+    			and a.post_category not in ('공지')
+    			order by a.post_seq desc
+    </select>
+ 
+ 
+	
+	<select id="read_post" resultType="com.human.springboot.JA_memberDTO" >
+		select a.post_title, a.post_content, a.post_seq, a.post_category,a.prod_category_code, a.post_comment, b.member_id, a.post_answer
+		from test_post a, test_member b
+		where a.post_seq=#{param1}
+		and a.member_seq = b.member_seq
+	</select>
+	<insert id="post_upload">
+		insert into test_post(post_seq, post_category, prod_category_code, member_seq, post_created,post_title,post_content,post_answer,post_img,post_comment) 
+		values(TEST_POST_SEQ.nextval, #{param1}, #{param2}, #{param3},to_char(sysdate,'yyyymmdd'),#{param4},#{param5},#{param6},#{param7},#{param8})
+	</insert>	
+	<update id="update_post">
+		update test_post set prod_category_code=#{param1},post_title=#{param2},post_content=#{param3} where post_seq=#{param4}
+	</update>
+	<delete id="delete_post">
+		delete from test_post where post_seq=#{param1}
+	</delete>
+	
+	
+	
+	
+	<update id="comment_upload"> <!--관리자 답변 & 답변완료로 변경  -->
+		update test_post set post_answer=#{param1},post_comment=#{param2} where post_seq=#{param3}
+	</update>
+	<update id="delete_comment"> <!--관리자 삭제 & 다시 답변대기로 변경  -->
+		update test_post set post_answer=#{param1},post_comment=#{param2} where post_seq=#{param3}
+	</update>
+
+
+
+
+	<!--  카트쿠키관련추가부분 -->
+	
+	<insert id="addCart">
+		insert into test_cart values(test_cart_seq.nextval, #{param1}, #{param2}, #{param3}, #{param4})
+	</insert>
+
+		
+</mapper>	
+

@@ -1,0 +1,15 @@
+body{font-family: 'Noto Sans KR', sans-serif; font-weight: 500;}
+#tblMemberList{border-collapse: collapse; width: 700px;  font-weight: 400}
+#tblMemberList tr:first-child td{font-weight: 700; border-bottom: 1px solid black;}
+#tblMemberList td{height: 30px;}
+#tblMemberList tr:nth-child(n+2):not(tr:last-child) td{border-bottom: 1px dotted gray;}
+#tblMemberList tr:last-child td{border-bottom: 1px solid black;}
+#tblMemberList td:nth-child(-n+2){width: 120px;}
+#tblMemberList td:nth-child(3){width: 255px;}
+#tblMemberList td:nth-child(4){width: 120px;}
+#displayPageCount{width: 50px; height: 25px;}
+#menuTitle{width: 700px; font-weight: 700; font-size: 21px; margin-bottom: 5px;}
+#pageBox{width: 700px;text-align: center;}
+.pageDiv{display: inline-block; width: 20px; font-weight: 400; color: gray;}
+.pageDiv:hover{cursor: pointer;}
+.bold{font-weight: 700; color: black;}
